@@ -1,0 +1,6 @@
+{
+    "db": "mongodb://localhost/sauth_prod",
+    "app": {
+        "name": "SAUTH - Production"
+    }
+}

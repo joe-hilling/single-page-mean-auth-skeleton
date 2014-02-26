@@ -1,14 +1,7 @@
-var _ = require('underscore')
 var passport = require('passport')
 var accessLevels = require('./routingConfig.js').accessLevels
-
-var auth = function(req, res, next){
-  if (!req.isAuthenticated()) 
-    res.send(401);
-  else
-    next();
-};
-
+var Auth = require('./controllers/auth.js')
+var User = require('./controllers/user.js')
 
 module.exports = [
   
@@ -22,28 +15,55 @@ module.exports = [
   {
     path: '/users',
     method: 'get',
-    middleware: [auth, function(req, res){ res.send([{name: "user1"}, {name: "user2"}])}],
+    middleware: [function(req, res){ res.send([{name: "user1"}, {name: "user2"}])}],
     accessLevel: accessLevels.user
   },
+
+  //==================================================================
+  // User administration
+
+  {
+    path: '/users/index',
+    method: 'get',
+    middleware: [User.index],
+    accessLevels: accessLevels.admin
+  },
+
+  {
+    path: '/users/create',
+    method: 'post',
+    middleware: [User.create],
+    accessLevels: accessLevels.admin
+  },
+
+  {
+    path: '/users/delete',
+    method: 'delete',
+    middleware: [User.delete],
+    accessLevels: accessLevels.admin
+  },
+
+  //==================================================================
+  // Authentication
 
   {
     path: '/loggedin',
     method: 'get',
-    middleware: [function(req,res){ res.send(req.isAuthenticated() ? req.user : '0')}],
+    middleware: [Auth.loggedin],
     accessLevel: accessLevels.public
   },
 
   {
     path: '/login',
     method : 'post',
-    middleware: [passport.authenticate('local'),function(req,res){ res.send(req.user)}],
+    middleware: [passport.authenticate('local'),Auth.login],
     accessLevel: accessLevels.public
   },
 
   {
     path: '/logout',
     method : 'post',
-    middleware: [function(req, res){ req.logOut(); res.send(200);}],
+    middleware: [Auth.logout],
     acceessLevel: accessLevels.public
   }
 

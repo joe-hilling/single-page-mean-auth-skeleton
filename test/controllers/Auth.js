@@ -13,6 +13,7 @@ var usercreds = {
 
 describe('Authentication', function(){
 
+
 	// Setup user and remove afterwards	
 	before(function(done){
 		User.find({}).remove(function(){
@@ -68,20 +69,17 @@ describe('Authentication', function(){
 		it('should allow logout', function(done){
 			agent.post('/logout').send().expect(200).end(function(err,res){
 				if(err) throw err
-				done()
+
+				agent.get('/loggedin').expect(200).end(function(err,res){
+					if(err) throw err
+					res.text.should.equal('0')
+					done()
+				})
 			})
 		})
-
-		it('user should not be logged in', function(done){
-			agent.get('/loggedin').expect(200).end(function(err,res){
-				if(err) throw err
-				res.text.should.equal('0')
-				done()
-			})
-		})
-
 
 	})
+
 
 	describe('Access', function(){
 
@@ -114,7 +112,7 @@ describe('Authentication', function(){
     		
     		agent
       			.post('/login')
-      			.send({ username: 'joehilling', password: 'CVG5cvg5' })
+      			.send(usercreds)
       			.expect(200).end(onResponse);
 
       	function onResponse(err, res){
