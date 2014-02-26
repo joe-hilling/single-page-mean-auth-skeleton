@@ -23,6 +23,7 @@ describe('Mongoose User Model', function(){
 		var user = new User(usercreds);
 		user.save(function(err,user){
 			if (err) throw err
+			should.exist(user)
 			done()
 		})
 	})
@@ -70,8 +71,9 @@ describe('Mongoose User Model', function(){
 
 	describe('Valid password method', function(done){
 		it('should match only the password', function(done){
-			User.findOne(usercreds, function(err, user){
+			User.findOne({ username: usercreds.username}, function(err, user){
 				if(err) throw err
+				should.exist(user)
 				user.validPassword('password').should.be.true
 				user.validPassword('xxxx').should.be.false
 				done();

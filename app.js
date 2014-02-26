@@ -1,6 +1,7 @@
-var express = require('express');
 var http = require('http');
 var path = require('path');
+var express = require('express');
+var mongoStore = require('connect-mongo')(express);
 var mongoose = require('mongoose');
 var passport = require('passport');
 
@@ -31,8 +32,12 @@ require('./config/passport.js')(passport)
 
 
 //==================================================================
-// Start express application
+// Configure express application
+
 var app = express();
+
+app.set('showStackError', true);    
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -48,7 +53,16 @@ if ('development' == app.get('env')){
 app.use(express.cookieParser()); 
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.session({ secret: 'securedsession' }));
+
+// Use mongo to store sessions rather than keep in memory
+app.use(express.session({
+  secret: 'MEAN',
+  store: new mongoStore({
+    db: db.connection.db,
+    collection: 'sessions'
+  })
+}));
+
 app.use(passport.initialize()); // Add passport initialization
 app.use(passport.session());    // Add passport initialization
 app.use(app.router);

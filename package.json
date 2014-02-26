@@ -12,7 +12,8 @@
     "passport-local": "*",
     "underscore" : "*",
     "connect-mongo" : "*",
-    "mongoose" : "*"
+    "mongoose" : "*",
+    "crypto" : "*"
   },
 
   "devDependencies" : {
