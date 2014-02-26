@@ -26,6 +26,13 @@ var db = mongoose.connect(config.db);
 // Init the model
 var User = require('./server/models/User.js')
 
+// If there is no admin user then bootstrap this
+User.findOne({ username : 'admin'},function(err, user){
+  if (!user){
+    (new User({ username : 'admin', password: 'admin', role: 'admin'})).save()
+  }
+})
+
 //==================================================================
 // Define the strategy to be used by PassportJS
 require('./config/passport.js')(passport)

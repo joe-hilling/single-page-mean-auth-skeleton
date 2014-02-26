@@ -1,8 +1,12 @@
-AuthenticationAngularJS
-=======================
+Single Page Locally Authenticated MEAN App 
+==========================================
 
-This code is an example to create secured routes in AngularJS. To have more details, please go to [the tutorial](https://vickev.com/#!/article/authentication-in-single-page-applications-node-js-passportjs-angularjs).
+Simple skeleton application.
 
-To run this example: 
+
 1. `npm install`
-2. `node app.js`
+
+2. Edit the details in the `config` folder to point to the mongo installation
+3. `node app.js` To start the server
+4. `grunt test` To run the tests
+
